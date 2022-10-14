@@ -25,6 +25,7 @@ def signup(request):
     context = {"form": form}
     return render(request, "accounts/signup.html", context)
 
+
 def index(request):
     users = get_user_model().objects.order_by("-pk")
     context = {
@@ -44,6 +45,7 @@ def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
     context = {"user": user}
     return render(request, "accounts/detail.html", context)
+
 
 def login(request):
     if request.user.is_authenticated:
@@ -105,14 +107,13 @@ def password(request):
 def delete(request):
     request.user.delete()
     auth_logout(request)
-    return redirect('accounts:index')
+    return redirect("accounts:index")
 
-def articles(request, pk):
-    user = get_user_model().objects.get(pk=pk)
-    reviews = Review.objects.filter(user_id=user.pk).order_by("-pk")
+
+@login_required
+def articles(request):
+    reviews = Review.objects.filter(user=request.user).order_by("-pk")
     context = {
         "reviews": reviews,
-        "user": user,
     }
     return render(request, "accounts/articles.html", context)
-
