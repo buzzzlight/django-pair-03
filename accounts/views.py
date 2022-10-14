@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from reviews.models import Review
 
 # Create your views here.
 def signup(request):
@@ -22,7 +23,6 @@ def signup(request):
     context = {"form": form}
     return render(request, "accounts/signup.html", context)
 
-
 def index(request):
     return render(request, "accounts/index.html")
 
@@ -35,7 +35,6 @@ def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
     context = {"user": user}
     return render(request, "accounts/detail.html", context)
-
 
 def login(request):
     if request.method == "POST":
@@ -94,3 +93,12 @@ def delete(request):
     request.user.delete()
     auth_logout(request)
     return redirect('accounts:index')
+
+def articles(request, pk):
+    user = get_user_model().objects.get(pk=pk)
+    reviews = Review.objects.order_by("-pk")
+    context = {
+        "reviews": reviews,
+        "user": user,
+    }
+    return render(request, "accounts/articles.html", context)

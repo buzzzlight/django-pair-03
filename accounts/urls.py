@@ -7,10 +7,11 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('index/', views.index, name='index'),
     path('<int:pk>/', views.mypage, name='mypage'),
-    path('<int:pk>/detail', views.detail, name='detail'),
+    path('<int:pk>/detail/', views.detail, name='detail'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('update/', views.update, name='update'),
     path('password/', views.password, name='password'),
     path('delete/', views.delete, name='delete'),
+    path('<int:pk>/articles/', views.articles, name='articles')
 ]

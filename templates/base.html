@@ -33,7 +33,7 @@
                 <div class="d-flex justify-content-center">
                   <p class="my-auto mx-2">{{ request.user }}님</p>
                   <a href="{% url 'reviews:create' %}" class="my-auto mx-2">글쓰기</a>
-                  <a href="{% url 'accounts:detail' user.pk %}" class="my-auto mx-2">마이페이지</a>
+                  <a href="{% url 'accounts:mypage' user.pk %}" class="my-auto mx-2">마이페이지</a>
                   <a href="{% url 'accounts:logout' %}" class="my-auto mx-2">로그아웃</a>
                 </div>
               {% else %}
