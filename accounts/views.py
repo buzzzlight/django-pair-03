@@ -11,6 +11,8 @@ from reviews.models import Review
 
 # Create your views here.
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect("main")
     # POST 요청 처리
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
@@ -24,12 +26,19 @@ def signup(request):
     return render(request, "accounts/signup.html", context)
 
 def index(request):
-    return render(request, "accounts/index.html")
+    users = get_user_model().objects.order_by("-pk")
+    context = {
+        "users": users,
+    }
+    return render(request, "accounts/index.html", context)
 
-def mypage(request, pk):
-    user = get_user_model().objects.get(pk=pk)
+
+@login_required
+def mypage(request):
+    user = request.user
     context = {"user": user}
     return render(request, "accounts/mypage.html", context)
+
 
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
@@ -37,6 +46,8 @@ def detail(request, pk):
     return render(request, "accounts/detail.html", context)
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect("main")
     if request.method == "POST":
         # AuthenticationForm은 ModelForm이 아님
         form = AuthenticationForm(request, data=request.POST)
@@ -73,20 +84,22 @@ def update(request):
     }
     return render(request, "accounts/update.html", context)
 
+
 @login_required
 def password(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-            return redirect('accounts:index')
+            return redirect("accounts:index")
     else:
         form = PasswordChangeForm(request.user)
     context = {
-        'form': form,
+        "form": form,
     }
-    return render(request, 'accounts/password.html', context)
+    return render(request, "accounts/password.html", context)
+
 
 @login_required
 def delete(request):
@@ -102,3 +115,4 @@ def articles(request, pk):
         "user": user,
     }
     return render(request, "accounts/articles.html", context)
+

@@ -36,6 +36,26 @@ def email_send(request):
 
 
 @login_required
+def click_email_send(request, pk):
+    from_info = get_user_model().objects.get(pk=pk)
+    form = CustomLettersForm(request.POST or None, initial={"to_email": from_info.email})
+    to_info = get_user_model().objects.get(pk=request.user.id)
+    if form.is_valid():
+        from_info = get_user_model().objects.filter(email=request.POST["to_email"])
+        for i in from_info:
+            temp = form.save(commit=False)
+            temp.recipient_id = i.id
+            temp.from_name = to_info.username
+            temp.from_email = to_info.email
+            temp.save()
+        return redirect("letters:index")
+    context = {
+        "form": form,
+    }
+    return render(request, "letters/email_send.html", context)
+
+
+@login_required
 def email_detail(request, pk):
     letter = CustomLetters.objects.get(pk=pk)
     if not letter.read:
