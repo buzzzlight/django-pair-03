@@ -99,7 +99,7 @@
             </td>
             <td class="align-middle">{{ review.created_at|date:'Y-m-d a h:i' }}</td>
             <td class="align-middle">{{ review.updated_at|date:'Y-m-d a h:i' }}</td>
-            <td class="align-middle">{{ review.user }}</td>
+            <td class="align-middle"><a href="{% url 'letters:click_email_send' review.user.id %}">{{ review.user }}</a></td>
           </tr>
         {% endfor %}
       </tbody>

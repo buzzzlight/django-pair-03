@@ -38,7 +38,7 @@ def email_send(request):
 @login_required
 def click_email_send(request, pk):
     from_info = get_user_model().objects.get(pk=pk)
-    form = CustomLettersForm(request.POST or None, from_email=from_info.email)
+    form = CustomLettersForm(request.POST or None, initial={"to_email": from_info.email})
     to_info = get_user_model().objects.get(pk=request.user.id)
     if form.is_valid():
         from_info = get_user_model().objects.filter(email=request.POST["to_email"])
