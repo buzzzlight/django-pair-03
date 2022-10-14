@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.urls import is_valid_path
 
 # from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserChangeForm, CustomUserCreationForm
