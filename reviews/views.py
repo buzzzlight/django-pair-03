@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from .forms import ReviewForm
 from .models import Review
 
@@ -19,6 +20,7 @@ def detail(request, review_pk):
     return render(request, "reviews/detail.html", context)
 
 
+@login_required
 def create(request):
     if request.method == "POST":
         form = ReviewForm(request.POST)
@@ -32,6 +34,7 @@ def create(request):
                 content=form.data.get("content"),
                 movie_name=form.data.get("movie_name"),
                 grade=grade,
+                user=request.user,
             )
             return redirect("reviews:index")
     else:
@@ -42,8 +45,13 @@ def create(request):
     return render(request, "reviews/create.html", context)
 
 
+@login_required
 def update(request, review_pk):
     review = Review.objects.get(pk=review_pk)
+
+    if request.user != review.user:
+        return redirect("reviews:index")
+
     if request.method == "POST":
         form = ReviewForm(request.POST, instance=review)
         if request.POST.get("grade") == "":
@@ -66,10 +74,16 @@ def update(request, review_pk):
     return render(request, "reviews/update.html", context)
 
 
+@login_required
 def delete(request, review_pk):
     review = Review.objects.get(pk=review_pk)
-    if request.method == "POST":
-        review.delete()
+
+    if request.user != review.user:
         return redirect("reviews:index")
+
+    if request.method == "POST":
+        if request.user == review.user:
+            review.delete()
+            return redirect("reviews:index")
     else:
         return redirect("reviews:detail", review_pk)

@@ -15,6 +15,7 @@
           <th scope="col">리뷰 평점</th>
           <th scope="col">작성 일자</th>
           <th scope="col">수정 일자</th>
+          <th scope="col">작성자</th>
         </tr>
       </thead>
       <tbody>
@@ -98,6 +99,7 @@
             </td>
             <td class="align-middle">{{ review.created_at|date:'Y-m-d a h:i' }}</td>
             <td class="align-middle">{{ review.updated_at|date:'Y-m-d a h:i' }}</td>
+            <td class="align-middle">{{ review.user }}</td>
           </tr>
         {% endfor %}
       </tbody>
