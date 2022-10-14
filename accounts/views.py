@@ -26,6 +26,10 @@ def signup(request):
 def index(request):
     return render(request, "accounts/index.html")
 
+def mypage(request, pk):
+    user = get_user_model().objects.get(pk=pk)
+    context = {"user": user}
+    return render(request, "accounts/mypage.html", context)
 
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
