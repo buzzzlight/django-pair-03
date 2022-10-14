@@ -25,13 +25,14 @@
           <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button> -->
           <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="{% url 'accounts:index' %}">Home</a>
-              <a class="nav-link" href="#">영화 커뮤니티</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'accounts:index' %}">HOME</a>
+              <a class="nav-link" href="{% url 'reviews:index' %}">영화 커뮤니티</a>
             </div>
             <div>
               {% if request.user.is_authenticated %}
                 <div class="d-flex justify-content-center">
                   <p class="my-auto mx-2">{{ request.user }}님</p>
+                  <a href="{% url 'reviews:create' %}" class="my-auto mx-2">글쓰기</a>
                   <a href="{% url 'accounts:detail' user.pk %}" class="my-auto mx-2">마이페이지</a>
                   <a href="{% url 'accounts:logout' %}" class="my-auto mx-2">로그아웃</a>
                 </div>

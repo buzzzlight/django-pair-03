@@ -22,7 +22,10 @@ def detail(request, review_pk):
 def create(request):
     if request.method == "POST":
         form = ReviewForm(request.POST)
-        grade = float(request.POST.get("grade"))
+        if request.POST.get("grade") == "":
+            grade = 0
+        else:
+            grade = float(request.POST.get("grade"))
         if form.is_valid() and 0 <= grade <= 5:
             Review.objects.create(
                 title=form.data.get("title"),
@@ -37,3 +40,27 @@ def create(request):
         "form": form,
     }
     return render(request, "reviews/create.html", context)
+
+
+def update(request, review_pk):
+    review = Review.objects.get(pk=review_pk)
+    if request.method == "POST":
+        form = ReviewForm(request.POST, instance=review)
+        if request.POST.get("grade") == "":
+            grade = 0
+        else:
+            grade = float(request.POST.get("grade"))
+        if form.is_valid() and 0 <= grade <= 5:
+            review.title = form.data.get("title")
+            review.content = form.data.get("content")
+            review.movie_name = form.data.get("movie_name")
+            review.grade = grade
+            review.save()
+            return redirect("reviews:detail", review_pk)
+    else:
+        form = ReviewForm(instance=review)
+    context = {
+        "form": form,
+        "grade": review.grade,
+    }
+    return render(request, "reviews/update.html", context)
