@@ -96,7 +96,7 @@ def delete(request):
 
 def articles(request, pk):
     user = get_user_model().objects.get(pk=pk)
-    reviews = Review.objects.order_by("-pk")
+    reviews = Review.objects.filter(user_id=user.pk).order_by("-pk")
     context = {
         "reviews": reviews,
         "user": user,
