@@ -8,6 +8,11 @@ class CustomLettersForm(forms.ModelForm):
     class Meta:
         model = CustomLetters
         fields = ("to_email", "title", "content")
+        labels = {
+            "to_email": "받는 사람",
+            "title": "제목",
+            "content": "내용",
+        }
 
     def clean_to_email(self):
         to_email = self.cleaned_data["to_email"]
