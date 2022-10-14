@@ -8,8 +8,10 @@ class User(AbstractUser):
     model.
     Username and password are required. Other fields are optional.
     """
+
     class Meta(AbstractUser.Meta):
         swappable = "AUTH_USER_MODEL"
+
     @property
     def full_name(self):
-        return f'{self.last_name}{self.first_name}'
+        return f"{self.last_name}{self.first_name}"
