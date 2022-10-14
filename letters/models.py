@@ -15,3 +15,4 @@ class CustomLetters(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
     important = models.BooleanField(default=False)
+    garbage = models.BooleanField(default=False)
