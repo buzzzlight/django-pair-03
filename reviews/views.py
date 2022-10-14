@@ -64,3 +64,12 @@ def update(request, review_pk):
         "grade": review.grade,
     }
     return render(request, "reviews/update.html", context)
+
+
+def delete(request, review_pk):
+    review = Review.objects.get(pk=review_pk)
+    if request.method == "POST":
+        review.delete()
+        return redirect("reviews:index")
+    else:
+        return redirect("reviews:detail", review_pk)

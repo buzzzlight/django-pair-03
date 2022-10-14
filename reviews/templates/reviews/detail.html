@@ -93,7 +93,7 @@
         <div class="bg-white p-3 mb-4" style="border-radius: 1rem; box-shadow: 2px 3px 7px rgba(0, 0, 0, 0.493);">
           <p>{{ review.content }}</p>
         </div>
-        <form action="{# url 'reviews:delete' review.pk #}" method="POST" class="form">
+        <form action="{% url 'reviews:delete' review.pk %}" method="POST" class="form">
           {% csrf_token %}
           <div class="d-block d-lg-none">
             <a href="{% url 'reviews:update' review.pk %}" class="btn btn-outline-primary form-control mb-3">수정</a>
