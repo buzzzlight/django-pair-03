@@ -22,7 +22,6 @@ class CustomUserCreationForm(UserCreationForm):
             raise ValidationError("중복된 이름이 있습니다.")
         return username
 
-
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = get_user_model()

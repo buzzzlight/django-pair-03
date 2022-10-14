@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 
 # from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserChangeForm, CustomUserCreationForm
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -26,6 +26,10 @@ def signup(request):
 def index(request):
     return render(request, "accounts/index.html")
 
+def mypage(request, pk):
+    user = get_user_model().objects.get(pk=pk)
+    context = {"user": user}
+    return render(request, "accounts/mypage.html", context)
 
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
@@ -69,3 +73,24 @@ def update(request):
         "form": form,
     }
     return render(request, "accounts/update.html", context)
+
+@login_required
+def password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('accounts:index')
+    else:
+        form = PasswordChangeForm(request.user)
+    context = {
+        'form': form,
+    }
+    return render(request, 'accounts/password.html', context)
+
+@login_required
+def delete(request):
+    request.user.delete()
+    auth_logout(request)
+    return redirect('accounts:index')
